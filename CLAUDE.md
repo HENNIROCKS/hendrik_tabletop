@@ -5,9 +5,6 @@ aus einem von zwei bis drei Templates und verteilt Bild und Text auf Mastodon,
 Bluesky und Instagram. Dazu kommt eine eigene Linkseite statt Linktree.
 Gedacht für jede App, nicht nur Fantasy City Warbands.
 
-Stand, Entscheidungen und offene Punkte stehen in der `IDEE.md`. Noch ist
-nichts gebaut; der nächste Schritt steht dort.
-
 ## Kanäle
 
 - Mastodon: `https://mastodon.social/@hendrik_tabletop` – erster Kanal, hier
@@ -21,8 +18,7 @@ Ein Bild für alle Kanäle, ein eigener Text je Kanal.
 
 ## Sprache
 
-Posts, Templates, Code, Kommentare, README und Commits sind englisch; das
-Gespräch bleibt deutsch.
+Posts, Templates, Code, Kommentare, README und Commits sind englisch.
 
 ## Grenzen
 
@@ -32,4 +28,3 @@ Gespräch bleibt deutsch.
   ein gepushter Post ist vor seinem Datum öffentlich lesbar.
 - Ins Repo kommen nur Schriften mit freier Lizenz (mit Lizenzdatei), eigene
   Hintergründe und Screenshots der Apps – keine Bilder aus Regelbüchern.
-- Gepostet wird nur nach Freigabe des Nutzers; ich bereite Bild und Texte vor.
