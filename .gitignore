@@ -1,0 +1,9 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Claude Code local settings (contains machine-specific permissions)
+.claude/
+
+# Local working files (notes, graphics, scratch)
+_works/
