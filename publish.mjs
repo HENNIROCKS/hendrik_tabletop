@@ -1,9 +1,9 @@
 // Picks drafts to post and asks twice before anything goes out.
 // Usage: node --env-file=.env publish.mjs   (in a terminal: it reads the answers from the keyboard)
-// Lists every folder in drafts/ that is not on Mastodon yet, shows the picked
-// ones as --dry-run does and can open their images, asks for y and then for
-// the number of posts, posts them one after the other and moves each into
-// posts/YYYY/. A draft already on Mastodon moves there when the run starts.
+// Lists every folder in drafts/ that is not on every channel yet, shows the
+// picked ones as --dry-run does and can open their images, asks for y and then
+// for the number of posts, posts them one after the other and moves each into
+// posts/YYYY/. A draft already on every channel moves there when the run starts.
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, readdir, rename } from 'node:fs/promises';
@@ -55,16 +55,17 @@ async function publish() {
 	for (const dir of folders) {
 		const prepared = await prepare(dir);
 		// Already out, by npm run post or a run that stopped: filed, not offered again.
-		if (prepared.published.mastodon) await file(prepared);
+		if (prepared.data && !prepared.targets.length) await file(prepared);
 		else drafts.push(prepared);
 	}
 	if (!drafts.length) return console.log('Nothing in drafts/ is waiting to be posted.');
 
-	console.log('Not on Mastodon yet:\n');
+	console.log('Waiting to be posted:\n');
 	drafts.forEach((draft, i) => {
-		const { data, problems } = draft;
+		const { data, problems, published, targets } = draft;
 		const head = data ? `${data.date}  ${data.title}  (${data.slides.length} ${data.slides.length === 1 ? 'slide' : 'slides'})` : draft.dir;
 		console.log(`${String(i + 1).padStart(2)}  ${head}`);
+		if (Object.keys(published).length) console.log(`    not on ${targets.map(({ name }) => name).join(', ')} yet`);
 		if (problems.length) console.log(`    cannot be posted: ${problems.join('; ').replace(/\n\s*/g, ' ')}`);
 		else if (data.date !== today) console.log(`    the images say ${data.date}, today is ${today}`);
 	});
@@ -85,20 +86,20 @@ async function publish() {
 		spawn('open', [...picked].flatMap((draft) => draft.images.map((image) => image.file)), { stdio: 'ignore' });
 	}
 
-	if (!yes(await ask(`\nPost ${picked.size === 1 ? 'this' : 'these'} to Mastodon? [y/N] `), false)) {
+	if (!yes(await ask(`\nPost ${picked.size === 1 ? 'this' : 'these'} to the channels under "to:"? [y/N] `), false)) {
 		return console.log('Nothing posted.');
 	}
 	const count = String(picked.size);
 	const posts = picked.size === 1 ? 'post' : 'posts';
-	if ((await ask(`Public on Mastodon and Bluesky at once. Type ${count} to post ${count} ${posts}: `))?.trim() !== count) {
+	if ((await ask(`Public at once, and Bluesky mirrors Mastodon. Type ${count} to post ${count} ${posts}: `))?.trim() !== count) {
 		return console.log('Nothing posted.');
 	}
 
 	const sent = [];
 	for (const draft of picked) {
 		try {
-			const url = await send(draft);
-			console.log(`${draft.dir}  ${url}`);
+			const urls = await send(draft);
+			console.log(`${draft.dir}  ${urls.join('  ')}`);
 			sent.push(draft);
 		} catch (error) {
 			console.error(`\n${draft.dir}: ${error.message}`);

@@ -2,7 +2,8 @@
 
 Teaser für Social Media, aus einer Datei je Post: Ein Skript rendert das Bild
 aus einem von zwei bis drei Templates und postet Bild und Text auf Mastodon,
-von dort gespiegelt nach Bluesky; Instagram bekommt dasselbe Bild von Hand.
+von dort gespiegelt nach Bluesky, und auf Pixelfed; Instagram bekommt dasselbe
+Bild von Hand.
 Dazu kommt eine eigene Linkseite statt Linktree.
 Gedacht für jede App, nicht nur Fantasy City Warbands.
 
@@ -12,10 +13,14 @@ Gedacht für jede App, nicht nur Fantasy City Warbands.
   wird gepostet.
 - Bluesky: das von Bridgy Fed gespiegelte Konto des Mastodon-Kontos, kein
   eigenes. Bekommt jeden Mastodon-Post ohne eigenen Aufruf.
+- Pixelfed: `https://pixelfed.de/hendrik_tabletop` – eigenes Konto, das
+  Skript postet direkt nach Mastodon dorthin, mit dem Mastodon-Text. Nicht
+  über Bridgy Fed spiegeln, sonst kommt jeder Post doppelt auf Bluesky.
 - Instagram: `https://www.instagram.com/hendrik_tabletop/` – von Hand,
   mit Kommentaren.
 
-Ein Bild für alle Kanäle, ein eigener Text je Kanal.
+Ein Bild für alle Kanäle, ein eigener Text je Kanal – außer Pixelfed, das den
+Mastodon-Text bekommt.
 
 ## Sprache
 
