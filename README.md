@@ -1,6 +1,6 @@
 # hendrik_tabletop
 
-Social media posts for my tabletop apps, one folder per post. A script renders the images from an HTML template and posts them with their text to Mastodon at [@hendrik_tabletop@mastodon.social](https://mastodon.social/@hendrik_tabletop). Bluesky gets every post through the [Bridgy Fed](https://fed.brid.gy/) mirror. The script then posts the same images and text to Pixelfed at [@hendrik_tabletop@pixelfed.de](https://pixelfed.de/hendrik_tabletop). Instagram gets the same images by hand.
+Social media posts for my tabletop apps, one folder per post. A script renders the images from an HTML template and posts them with their text to Mastodon at [@hendrik_tabletop@mastodon.social](https://mastodon.social/@hendrik_tabletop). Bluesky gets every post through the [Bridgy Fed](https://fed.brid.gy/) mirror. The script then posts the same images and text to Pixelfed at [@hendrik_tabletop@pixelfed.social](https://pixelfed.social/hendrik_tabletop). Instagram gets the same images by hand.
 
 ## Setup
 
@@ -12,7 +12,7 @@ npx playwright install chromium
 cp .env.example .env
 ```
 
-In `.env`, set `MASTODON_INSTANCE` to the server alone (`https://mastodon.social`, no path, no trailing slash) and `MASTODON_TOKEN` to the access token of an application created under Preferences → Development, with the scopes `write:media` and `write:statuses` only. Set `PIXELFED_INSTANCE` (`https://pixelfed.de`) and `PIXELFED_TOKEN` the same way. Where the instance turns off personal access tokens, create an OAuth client under Settings → Developers with the scopes `read` and `write` (Pixelfed needs `read` to check an upload) and exchange an authorization code for a token at `/oauth/token`; such a token expires, after a year on pixelfed.de. `.env` is git-ignored.
+In `.env`, set `MASTODON_INSTANCE` to the server alone (`https://mastodon.social`, no path, no trailing slash) and `MASTODON_TOKEN` to the access token of an application created under Preferences → Development, with the scopes `write:media` and `write:statuses` only. Set `PIXELFED_INSTANCE` (`https://pixelfed.social`) and `PIXELFED_TOKEN` the same way. Where the instance turns off personal access tokens, create an OAuth client under Settings → Developers with the scopes `read` and `write` (Pixelfed needs `read` to check an upload) and exchange an authorization code for a token at `/oauth/token`; such a token expires, after a year on pixelfed.social. `.env` is git-ignored.
 
 ## A post
 

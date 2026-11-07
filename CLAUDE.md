@@ -13,7 +13,7 @@ Gedacht für jede App, nicht nur Fantasy City Warbands.
   wird gepostet.
 - Bluesky: das von Bridgy Fed gespiegelte Konto des Mastodon-Kontos, kein
   eigenes. Bekommt jeden Mastodon-Post ohne eigenen Aufruf.
-- Pixelfed: `https://pixelfed.de/hendrik_tabletop` – eigenes Konto, das
+- Pixelfed: `https://pixelfed.social/hendrik_tabletop` – eigenes Konto, das
   Skript postet direkt nach Mastodon dorthin, mit dem Mastodon-Text. Nicht
   über Bridgy Fed spiegeln, sonst kommt jeder Post doppelt auf Bluesky.
 - Instagram: `https://www.instagram.com/hendrik_tabletop/` – von Hand,
