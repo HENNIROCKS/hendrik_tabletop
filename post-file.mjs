@@ -7,6 +7,8 @@ import { parse } from 'yaml';
 
 /** What a slide's graphic can be drawn into; the class of the same name is in the template CSS. */
 const FRAMES = ['phone'];
+/** Browser bars drawn onto a phone; chrome.mjs draws them. */
+const TOOLBARS = ['safari', 'chrome'];
 
 /** Returns { data, channels, errors }; errors lists every problem at once. */
 export async function readPost(dir) {
@@ -36,6 +38,8 @@ export async function readPost(dir) {
 			if (!slide?.alt) errors.push(`slide ${n}: alt is missing`);
 			if (!slide?.text && !slide?.graphic) errors.push(`slide ${n}: needs text or a graphic`);
 			if (slide?.frame && !FRAMES.includes(slide.frame)) errors.push(`slide ${n}: frame must be one of ${FRAMES.join(', ')}`);
+			if (slide?.toolbar && !TOOLBARS.includes(slide.toolbar)) errors.push(`slide ${n}: toolbar must be one of ${TOOLBARS.join(', ')}`);
+			if (slide?.toolbar && slide.frame !== 'phone') errors.push(`slide ${n}: toolbar needs frame: phone`);
 			if (slide?.frame && !slide.graphic) errors.push(`slide ${n}: frame needs a graphic`);
 		});
 	}

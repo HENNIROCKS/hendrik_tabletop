@@ -9,6 +9,7 @@ import { basename, extname, join, resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { formatDate, readPost } from './post-file.mjs';
 import { circleQr } from './qr.mjs';
+import { ICON_PATTERN, loadIcons, toolbar } from './chrome.mjs';
 
 const WIDTH = 1080;
 const HEIGHT = 1350;
@@ -17,6 +18,8 @@ const JPEG_QUALITY = 85;
 // Graphics never show wider than the post.
 const GRAPHIC_WIDTH = 1080;
 const GRAPHIC_QUALITY = 90;
+// Screenshots more than one post shows.
+const SCREENSHOTS = 'assets/screenshots';
 
 const target = process.argv[2] ?? 'base';
 
@@ -43,11 +46,15 @@ async function renderPost(page, dir) {
 	const { data, errors } = await readPost(dir);
 	if (errors.length) return fail(`${dir}/post.md:\n  ${errors.join('\n  ')}`);
 
+	const icons = await loadIcons();
+	const unknown = data.slides.flatMap((s) => [...(s.text ?? '').matchAll(ICON_PATTERN)].map((m) => m[1]).filter((n) => !icons[n]));
+	if (unknown.length) return fail(`${dir}/post.md: no icon named ${unknown.join(', ')}`);
+
 	const graphics = {};
 	for (const slide of data.slides) {
 		if (!slide.graphic) continue;
 		const graphic = await optimise(dir, slide.graphic);
-		if (!graphic) return fail(`${dir}: graphic "${slide.graphic}" is neither in originals/ nor optimised`);
+		if (!graphic) return fail(`${dir}: graphic "${slide.graphic}" is neither in originals/, optimised nor in assets/screenshots/`);
 		graphics[slide.graphic] = graphic;
 	}
 
@@ -63,6 +70,8 @@ async function renderPost(page, dir) {
 			paragraphs: slide.text ? slide.text.trim().split(/\n\s*\n/) : [],
 			graphic: slide.graphic ? pathToFileURL(resolve(graphics[slide.graphic])).href : null,
 			frame: slide.frame ?? null,
+			toolbar: slide.toolbar ? toolbar(slide.toolbar, icons, data.url) : null,
+			icons,
 			alt: slide.alt
 		});
 		const problems = await check(page);
@@ -83,13 +92,19 @@ async function renderPost(page, dir) {
 
 /**
  * originals/<name> → <name without extension>.webp beside post.md, skipped when
- * the WebP is newer. Without the original an existing WebP is used as it is.
+ * the WebP is newer. Without the original an existing WebP is used as it is;
+ * without either, the shared assets/screenshots/<name> is copied in once, so a
+ * screenshot replaced later leaves the posts that show it as they were.
  */
 async function optimise(dir, name) {
-	const original = join(dir, 'originals', name);
+	const own = join(dir, 'originals', name);
 	const optimised = join(dir, `${basename(name, extname(name))}.webp`);
-	if (!existsSync(original)) return existsSync(optimised) ? optimised : null;
-	if (existsSync(optimised) && statSync(optimised).mtimeMs >= statSync(original).mtimeMs) return optimised;
+	let original = own;
+	if (!existsSync(own)) {
+		if (existsSync(optimised)) return optimised;
+		original = join(SCREENSHOTS, name);
+		if (!existsSync(original)) return null;
+	} else if (existsSync(optimised) && statSync(optimised).mtimeMs >= statSync(own).mtimeMs) return optimised;
 	await sharp(original).resize({ width: GRAPHIC_WIDTH, withoutEnlargement: true }).webp({ quality: GRAPHIC_QUALITY }).toFile(optimised);
 	report(optimised);
 	return optimised;
@@ -109,9 +124,32 @@ async function fill(page, fields) {
 		if (fields.title !== undefined) slot('title').textContent = fields.title;
 		if (fields.qr !== undefined) slot('qr').innerHTML = fields.qr;
 		if (fields.paragraphs !== undefined) {
+			// ":name:" becomes the icon of that name, inline in the text.
 			slot('text').replaceChildren(
-				...fields.paragraphs.map((text) => Object.assign(document.createElement('p'), { textContent: text.trim() }))
+				...fields.paragraphs.map((text) => {
+					const p = document.createElement('p');
+					// The icon and the word before it never part at a line break.
+					const parts = text.trim().split(/:([a-z0-9_]+):/);
+					parts.forEach((part, i) => {
+						if (i % 2 === 1) return;
+						const next = parts[i + 1];
+						if (next === undefined) return p.append(part);
+						const [, before, word] = part.match(/^([\s\S]*?)(\S*\s*)$/);
+						const icon = Object.assign(document.createElement('span'), { className: 'icon', innerHTML: fields.icons[next] });
+						const keep = Object.assign(document.createElement('span'), { className: 'icon-keep' });
+						keep.append(word, icon);
+						p.append(before, keep);
+					});
+					return p;
+				})
 			);
+		}
+		// A text icon is only as wide as its glyph, so a narrow one like ⋮ keeps no gap beside it.
+		for (const svg of document.querySelectorAll('.icon svg')) {
+			const box = svg.getBBox();
+			const pad = 120;
+			svg.setAttribute('viewBox', `${box.x - pad} -960 ${box.width + 2 * pad} 960`);
+			svg.style.width = `${(0.82 * (box.width + 2 * pad)) / 960}em`;
 		}
 		if (fields.graphic) {
 			const img = Object.assign(document.createElement('img'), { src: fields.graphic, alt: fields.alt ?? '' });
@@ -123,6 +161,11 @@ async function fill(page, fields) {
 				graphic.firstChild.append(img);
 			}
 			slot('graphic').replaceChildren(graphic);
+			if (fields.toolbar) {
+				slot('graphic').classList.add('has-toolbar');
+				slot('graphic').insertAdjacentHTML('beforeend', fields.toolbar.outside);
+				graphic.firstChild.insertAdjacentHTML('afterbegin', fields.toolbar.inside);
+			}
 			await img.decode();
 		}
 		await document.fonts.ready;

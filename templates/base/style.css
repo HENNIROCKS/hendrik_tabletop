@@ -7,6 +7,12 @@
 }
 
 @font-face {
+	font-family: 'Roboto';
+	src: url('../../assets/fonts/roboto/Roboto[wdth,wght].ttf') format('truetype');
+	font-weight: 100 900;
+}
+
+@font-face {
 	font-family: 'Alegreya';
 	src: url('../../assets/fonts/alegreya/Alegreya[wght].ttf') format('truetype');
 	font-weight: 400 900;
@@ -130,4 +136,164 @@ body {
 	object-fit: cover;
 	object-position: top;
 	border-radius: 7.265cqw;
+}
+
+/* An icon inside the text, as tall as a capital letter, kept on one line with the word before it. */
+.icon-keep {
+	white-space: nowrap;
+}
+
+.icon svg {
+	width: 0.82em;
+	height: 0.82em;
+	vertical-align: -0.1em;
+	fill: currentColor;
+}
+
+/* A browser bar over the phone: the phone is drawn larger and cut off at the
+   image's bottom edge, with no margin below it. */
+.post-graphic.has-toolbar {
+	position: relative;
+	margin-bottom: calc(-1 * var(--margin));
+}
+
+.has-toolbar > .phone {
+	width: 780px;
+	height: auto;
+}
+
+.bar-button svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	fill: currentColor;
+}
+
+.safari-bar {
+	position: absolute;
+	bottom: calc(72px + var(--margin));
+	left: 50%;
+	translate: -50%;
+	width: 656px;
+	height: 100px;
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding-inline: 24px;
+	border-radius: 50px;
+	background: rgb(255 255 255 / 0.94);
+	box-shadow: 0 10px 36px rgb(0 0 0 / 0.22), 0 1px 3px rgb(0 0 0 / 0.12);
+	color: #111;
+}
+
+.safari-bar .bar-button {
+	width: 50px;
+	height: 50px;
+}
+
+.safari-bar .is-off {
+	color: #b5b5b5;
+}
+
+/* Chrome: address bar above the page, the menu open at the top right. */
+.has-toolbar .phone-frame {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+}
+
+.has-toolbar .phone-frame img {
+	flex: 1;
+	min-height: 0;
+	height: auto;
+}
+
+.chrome-bar {
+	display: flex;
+	align-items: center;
+	gap: 3cqw;
+	height: 14cqw;
+	padding: 0 3cqw;
+	border-radius: 7.265cqw 7.265cqw 0 0;
+	background: #fff;
+	color: #444;
+	font: 400 4.2cqw/1 Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.has-toolbar .phone-frame .chrome-bar ~ img {
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+.chrome-bar .bar-button {
+	width: 6.5cqw;
+	height: 6.5cqw;
+	flex: none;
+}
+
+.chrome-url {
+	flex: 1;
+	padding: 2.6cqw 4cqw;
+	border-radius: 99px;
+	background: #eef0f3;
+	color: #222;
+}
+
+.chrome-tabs {
+	display: grid;
+	place-items: center;
+	width: 5.5cqw;
+	height: 5.5cqw;
+	border: 0.6cqw solid currentColor;
+	border-radius: 1.2cqw;
+	font-size: 3.2cqw;
+	font-weight: 700;
+}
+
+.chrome-menu {
+	position: absolute;
+	top: 5cqw;
+	right: 4.5cqw;
+	width: 58cqw;
+	padding: 1.5cqw 0;
+	border-radius: 4cqw;
+	overflow: hidden;
+	background: #fff;
+	box-shadow: 0 2cqw 6cqw rgb(0 0 0 / 0.25), 0 0.3cqw 1cqw rgb(0 0 0 / 0.12);
+	color: #222;
+	font: 400 4.6cqw/1 Roboto, 'Helvetica Neue', sans-serif;
+}
+
+.chrome-menu-top {
+	display: flex;
+	justify-content: space-around;
+	padding: 2.5cqw 2cqw 3.5cqw;
+}
+
+.chrome-menu-top .bar-button {
+	width: 6cqw;
+	height: 6cqw;
+	color: #444;
+}
+
+.chrome-menu ul {
+	padding: 0;
+	list-style: none;
+}
+
+.chrome-menu li {
+	display: flex;
+	align-items: center;
+	gap: 5cqw;
+	padding: 3.6cqw 5cqw;
+}
+
+.chrome-menu li svg {
+	width: 6cqw;
+	height: 6cqw;
+	fill: #444;
+}
+
+.chrome-menu li.is-hit {
+	background: #e3e7ee;
 }
