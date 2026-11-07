@@ -1,0 +1,133 @@
+/* One post image: 1080 × 1350 (4:5), the narrowest ratio the Instagram API takes. */
+
+@font-face {
+	font-family: 'Grenze Gotisch';
+	src: url('../../assets/fonts/grenze-gotisch/GrenzeGotisch[wght].ttf') format('truetype');
+	font-weight: 100 900;
+}
+
+@font-face {
+	font-family: 'Alegreya';
+	src: url('../../assets/fonts/alegreya/Alegreya[wght].ttf') format('truetype');
+	font-weight: 400 900;
+}
+
+:root {
+	--ink: #000;
+	/* Instagram's profile grid crops a 4:5 post to 3:4, about 34 px off each side. */
+	--margin: 36px;
+	--qr-size: 178px;
+	--qr-inset: 34px;
+	--qr-gap: 24px;
+}
+
+* {
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html,
+body {
+	width: 1080px;
+	height: 1350px;
+}
+
+body {
+	background: #e4ddd2 url('../../assets/backgrounds/bg-fcw1.jpg') center / cover no-repeat;
+	color: var(--ink);
+	-webkit-font-smoothing: antialiased;
+}
+
+.post {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	padding: 28px var(--margin) var(--margin);
+}
+
+/* The headline keeps clear of the QR code; render.mjs fails if it needs a second line. */
+.post-head {
+	padding-right: calc(var(--qr-inset) + var(--qr-size) + var(--qr-gap) - var(--margin));
+}
+
+.post-date {
+	font: 600 31px/1 'Grenze Gotisch', serif;
+}
+
+.post-title {
+	margin-top: -6px;
+	font: 600 84px/1 'Grenze Gotisch', serif;
+	white-space: nowrap;
+}
+
+.post-qr {
+	position: absolute;
+	top: var(--qr-inset);
+	right: var(--qr-inset);
+	width: var(--qr-size);
+	height: var(--qr-size);
+}
+
+.post-qr svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.post-text {
+	margin-top: 68px;
+	max-width: 696px;
+	font: 400 48px/48px 'Alegreya', serif;
+}
+
+.post-text p + p {
+	margin-top: 24px;
+}
+
+/* Whatever room the text leaves; a graphic shows whole, standing on the bottom edge.
+   Clipped, so a graphic running off the edge never counts as overflowing text. */
+.post-graphic {
+	flex: 1;
+	min-height: 0;
+	margin-top: var(--margin);
+	overflow: hidden;
+}
+
+.post-graphic > img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	object-position: center bottom;
+}
+
+.post-graphic > .phone {
+	height: 100%;
+	margin-inline: auto;
+}
+
+/* A phone around a screenshot. Every measure is a share of the phone's width,
+   so it draws the same at any size: 1170 px wide → 8.5 outline, 37 bezel,
+   radius 120 outside and 85 on the screen, which has an iPhone screenshot's ratio. */
+.phone {
+	container-type: inline-size;
+	aspect-ratio: 1170 / 2432;
+}
+
+.phone-frame {
+	height: 100%;
+	padding: 3.162cqw;
+	border: 0.7265cqw solid var(--ink);
+	border-radius: 10.256cqw;
+	background: #fff;
+}
+
+.phone-frame img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	object-position: top;
+	border-radius: 7.265cqw;
+}

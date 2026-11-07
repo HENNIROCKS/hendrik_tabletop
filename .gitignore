@@ -5,5 +5,16 @@ Thumbs.db
 # Claude Code local settings (contains machine-specific permissions)
 .claude/
 
+# API tokens
+.env
+
 # Local working files (notes, graphics, scratch)
 _works/
+
+# Dependencies and template previews
+node_modules/
+out/
+
+# Posts not ready yet, and full-size screenshots (posts keep the optimised copy)
+drafts/
+posts/**/originals/
