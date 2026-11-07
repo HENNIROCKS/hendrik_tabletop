@@ -83,7 +83,7 @@ The images must be rendered after the last change to `post.md`.
 npm run publish
 ```
 
-Picks what goes out, in a terminal: it lists every folder in `drafts/` that is not on Mastodon yet, with what keeps one from going out and a warning when the date in its images is not today. The numbers typed pick the posts; each is shown as `--dry-run` shows it, and its images open in Preview unless declined. Then it asks twice – `y`, and the number of posts picked – and anything else posts nothing. The posts go out one after the other; if one fails, the run stops and names those already out. Each one posted can then be moved to `posts/YYYY/`.
+Picks what goes out, in a terminal: it lists every folder in `drafts/` that is not on Mastodon yet, with what keeps one from going out and a warning when the date in its images is not today. The numbers typed pick the posts; each is shown as `--dry-run` shows it, and its images open in Preview unless declined. Then it asks twice – `y`, and the number of posts picked – and anything else posts nothing. The posts go out one after the other; if one fails, the run stops and names those already out. Each one posted moves to `posts/YYYY/`, and so does a draft already on Mastodon when a run starts, such as one posted with `npm run post`.
 
 ## Link page
 

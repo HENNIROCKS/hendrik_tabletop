@@ -2,8 +2,8 @@
 // Usage: node --env-file=.env publish.mjs   (in a terminal: it reads the answers from the keyboard)
 // Lists every folder in drafts/ that is not on Mastodon yet, shows the picked
 // ones as --dry-run does and can open their images, asks for y and then for
-// the number of posts, posts them one after the other and offers to move each
-// into posts/YYYY/.
+// the number of posts, posts them one after the other and moves each into
+// posts/YYYY/. A draft already on Mastodon moves there when the run starts.
 import { spawn } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { mkdir, readdir, rename } from 'node:fs/promises';
@@ -54,9 +54,9 @@ async function publish() {
 	const drafts = [];
 	for (const dir of folders) {
 		const prepared = await prepare(dir);
-		// Already out: not offered again.
-		if (prepared.published.mastodon) continue;
-		drafts.push(prepared);
+		// Already out, by npm run post or a run that stopped: filed, not offered again.
+		if (prepared.published.mastodon) await file(prepared);
+		else drafts.push(prepared);
 	}
 	if (!drafts.length) return console.log('Nothing in drafts/ is waiting to be posted.');
 
@@ -109,15 +109,15 @@ async function publish() {
 		}
 	}
 
-	for (const draft of sent) {
-		const target = join(POSTS, draft.data.date.slice(0, 4), basename(draft.dir));
-		if (existsSync(target)) {
-			console.log(`${target} exists already; ${draft.dir} stays where it is.`);
-			continue;
-		}
-		if (!yes(await ask(`Move ${draft.dir} to ${target}? [Y/n] `), true)) continue;
-		await mkdir(join(POSTS, draft.data.date.slice(0, 4)), { recursive: true });
-		await rename(draft.dir, target);
-		console.log(`moved to ${target}`);
-	}
+	for (const draft of sent) await file(draft);
+}
+
+/** Moves a posted draft to posts/YYYY/; a folder already there is left alone. */
+async function file(draft) {
+	const year = join(POSTS, draft.data.date.slice(0, 4));
+	const target = join(year, basename(draft.dir));
+	if (existsSync(target)) return console.log(`${target} exists already; ${draft.dir} stays where it is.`);
+	await mkdir(year, { recursive: true });
+	await rename(draft.dir, target);
+	console.log(`${draft.dir} moved to ${target}`);
 }
