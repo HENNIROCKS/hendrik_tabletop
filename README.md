@@ -52,6 +52,7 @@ How to install Fantasy City Warbands – no store, no account. Link in bio.
 - Each slide needs `alt` and either `text`, a `graphic` or both. A graphic is read from the folder's `originals/` and saved beside `post.md` as WebP, at most 1080 px wide; `originals/` is git-ignored. `frame: phone` draws a phone around it.
 - A graphic the folder does not have is taken from `assets/screenshots/`, the screenshots more than one post shows. It is copied into the post once, so replacing a screenshot there leaves earlier posts as they were.
 - `toolbar: safari` draws Safari's toolbar over the phone, `toolbar: chrome` Chrome's address bar with its menu open; both need `frame: phone`. The phone is then drawn larger and cut off at the image's bottom edge.
+- `card: <image>` lays a single card, cut from a screenshot, tilted over the phone; it needs `frame: phone` and no `toolbar`, is read like a graphic, and phone and card are cut off at the image's bottom edge.
 - `:name:` in a slide's text is the icon of that name from `assets/icons/`, kept on one line with the word before it. The icons are [Material Symbols](https://fonts.google.com/icons) (Apache 2.0); `node icons.mjs <name> …` fetches more.
 - `hashtags` are added below the Mastodon text.
 

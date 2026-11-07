@@ -172,6 +172,33 @@ body {
   height: auto;
 }
 
+/* A single card laid over the phone, tilted, its top left corner level with
+   the phone's top; both are cut off at the image's bottom edge. The radius is
+   the app card's 10 px at its 355 px width. */
+.post-graphic.has-card {
+  position: relative;
+  margin-bottom: calc(-1 * var(--margin));
+}
+
+.has-card > .phone {
+  width: 824px;
+  height: auto;
+}
+
+.post-graphic > .post-card {
+  position: absolute;
+  top: 0;
+  left: 264px;
+  width: 750px;
+  height: auto;
+  border-radius: 21px;
+  rotate: 7deg;
+  transform-origin: top left;
+  box-shadow:
+    -6px 14px 40px rgb(0 0 0 / 0.28),
+    0 1px 3px rgb(0 0 0 / 0.14);
+}
+
 .bar-button svg {
   display: block;
   width: 100%;

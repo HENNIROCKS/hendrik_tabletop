@@ -51,11 +51,10 @@ async function renderPost(page, dir) {
 	if (unknown.length) return fail(`${dir}/post.md: no icon named ${unknown.join(', ')}`);
 
 	const graphics = {};
-	for (const slide of data.slides) {
-		if (!slide.graphic) continue;
-		const graphic = await optimise(dir, slide.graphic);
-		if (!graphic) return fail(`${dir}: graphic "${slide.graphic}" is neither in originals/, optimised nor in assets/screenshots/`);
-		graphics[slide.graphic] = graphic;
+	for (const name of data.slides.flatMap((s) => [s.graphic, s.card]).filter(Boolean)) {
+		const graphic = await optimise(dir, name);
+		if (!graphic) return fail(`${dir}: graphic "${name}" is neither in originals/, optimised nor in assets/screenshots/`);
+		graphics[name] = graphic;
 	}
 
 	const total = data.slides.length;
@@ -71,6 +70,7 @@ async function renderPost(page, dir) {
 			graphic: slide.graphic ? pathToFileURL(resolve(graphics[slide.graphic])).href : null,
 			frame: slide.frame ?? null,
 			toolbar: slide.toolbar ? toolbar(slide.toolbar, icons, data.url) : null,
+			card: slide.card ? pathToFileURL(resolve(graphics[slide.card])).href : null,
 			icons,
 			alt: slide.alt
 		});
@@ -165,6 +165,13 @@ async function fill(page, fields) {
 				slot('graphic').classList.add('has-toolbar');
 				slot('graphic').insertAdjacentHTML('beforeend', fields.toolbar.outside);
 				graphic.firstChild.insertAdjacentHTML('afterbegin', fields.toolbar.inside);
+			}
+			// The slide's alt describes the card as well.
+			const card = fields.card && Object.assign(document.createElement('img'), { className: 'post-card', src: fields.card, alt: '' });
+			if (card) {
+				slot('graphic').classList.add('has-card');
+				slot('graphic').append(card);
+				await card.decode();
 			}
 			await img.decode();
 		}

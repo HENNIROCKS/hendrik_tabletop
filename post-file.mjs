@@ -41,6 +41,8 @@ export async function readPost(dir) {
 			if (slide?.toolbar && !TOOLBARS.includes(slide.toolbar)) errors.push(`slide ${n}: toolbar must be one of ${TOOLBARS.join(', ')}`);
 			if (slide?.toolbar && slide.frame !== 'phone') errors.push(`slide ${n}: toolbar needs frame: phone`);
 			if (slide?.frame && !slide.graphic) errors.push(`slide ${n}: frame needs a graphic`);
+			if (slide?.card && slide.frame !== 'phone') errors.push(`slide ${n}: card needs frame: phone`);
+			if (slide?.card && slide.toolbar) errors.push(`slide ${n}: card and toolbar do not go together`);
 		});
 	}
 	return { data, channels, errors };
