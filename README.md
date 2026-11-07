@@ -79,6 +79,12 @@ npm run post -- drafts/2026-11-04-how-to-install
 
 The images must be rendered after the last change to `post.md`.
 
+```sh
+npm run publish
+```
+
+Picks what goes out, in a terminal: it lists every folder in `drafts/` that is not on Mastodon yet, with what keeps one from going out and a warning when the date in its images is not today. The numbers typed pick the posts; each is shown as `--dry-run` shows it, and its images open in Preview unless declined. Then it asks twice – `y`, and the number of posts picked – and anything else posts nothing. The posts go out one after the other; if one fails, the run stops and names those already out. Each one posted can then be moved to `posts/YYYY/`.
+
 ## Link page
 
 `site/` is the link page at [tabletop.hennirocks.de](https://tabletop.hennirocks.de), for the bio links: one static HTML page, no build step. Open `site/index.html` in a browser to preview it. Every push to `main` that changes `site/` publishes the folder as it is to GitHub Pages (`.github/workflows/pages.yml`).

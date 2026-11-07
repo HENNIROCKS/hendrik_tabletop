@@ -8,7 +8,8 @@
 	},
 	"scripts": {
 		"render": "node render.mjs",
-		"post": "node --env-file=.env post.mjs"
+		"post": "node --env-file=.env post.mjs",
+		"publish": "node --env-file=.env publish.mjs"
 	},
 	"devDependencies": {
 		"playwright": "1.65.0",
