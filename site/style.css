@@ -1,0 +1,191 @@
+/* Fonts follow Fantasy City Warbands, the banner colour comes from the
+   portrait. Colours and fonts live in :root and the @font-face rules, so a
+   new look leaves the markup alone. */
+
+@font-face {
+	font-family: 'Grenze Gotisch';
+	src: url('fonts/grenze-gotisch/GrenzeGotisch[wght].woff2') format('woff2');
+	font-weight: 100 900;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: 'Alegreya';
+	src: url('fonts/alegreya/Alegreya[wght].woff2') format('woff2');
+	font-weight: 400 900;
+	font-display: swap;
+}
+
+:root {
+	--font-display: 'Grenze Gotisch', serif;
+	--font-text: 'Alegreya', serif;
+
+	--paper: #faf6f3;
+	--surface: #efe7dd;
+	--line: rgba(0, 0, 0, 0.12);
+	--ink: #000;
+	--ink-muted: rgba(0, 0, 0, 0.6);
+	--link: #000;
+
+	/* Banner colour taken from the portrait's background */
+	--banner: #f4c22f;
+}
+
+* {
+	box-sizing: border-box;
+	margin: 0;
+	padding: 0;
+}
+
+html {
+	font-family: var(--font-text);
+	font-size: 18px;
+	line-height: 1.4;
+	background-color: var(--paper);
+	color: var(--ink);
+	-webkit-font-smoothing: antialiased;
+}
+
+body {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	max-width: 30rem;
+	min-height: 100vh;
+	margin: 0 auto;
+	padding-bottom: 2rem;
+}
+
+header {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 0 1.25rem;
+	text-align: center;
+	color: var(--ink-muted);
+}
+
+.banner {
+	align-self: stretch;
+	height: 9rem;
+	margin: 0 -1.25rem;
+	background-color: var(--banner);
+}
+
+.avatar {
+	width: 7.5rem;
+	height: 7.5rem;
+	margin-top: -3.75rem;
+	border: 4px solid var(--paper);
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+h1 {
+	margin-top: 0.75rem;
+	font-family: var(--font-display);
+	font-size: 2.75rem;
+	font-weight: 600;
+	line-height: 1;
+	color: var(--ink);
+}
+
+.handle {
+	margin: 0.25rem 0 0.75rem;
+	font-size: 0.9rem;
+	letter-spacing: 0.05em;
+}
+
+main {
+	padding: 0 1.25rem;
+}
+
+.apps {
+	display: flex;
+	flex-direction: column;
+	gap: 1.25rem;
+	list-style: none;
+}
+
+.apps p {
+	margin-top: 0.4rem;
+	font-size: 0.9rem;
+	text-align: center;
+	color: var(--ink-muted);
+}
+
+a {
+	color: var(--link);
+	text-underline-offset: 0.2em;
+}
+
+.app {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.75rem;
+	border: 1px solid var(--line);
+	border-radius: 0.75rem;
+	background-color: var(--surface);
+	color: var(--ink);
+	text-decoration: none;
+	transition: border-color 150ms;
+}
+
+.app:hover,
+.app:focus-visible {
+	border-color: var(--ink-muted);
+}
+
+.app img {
+	flex: none;
+	border-radius: 0.75rem;
+}
+
+.app > span {
+	display: flex;
+	flex-direction: column;
+}
+
+.app strong {
+	font-size: 1.15rem;
+	line-height: 1.2;
+}
+
+.app span span {
+	font-size: 0.9rem;
+	color: var(--ink-muted);
+}
+
+:focus-visible {
+	outline: 2px solid var(--link);
+	outline-offset: 2px;
+}
+
+footer {
+	display: flex;
+	justify-content: center;
+	gap: 0.5rem;
+	margin-top: auto;
+}
+
+footer a {
+	display: grid;
+	place-items: center;
+	width: 2.75rem;
+	height: 2.75rem;
+	border-radius: 50%;
+	color: var(--link);
+	transition: background-color 150ms;
+}
+
+footer a:hover,
+footer a:focus-visible {
+	background-color: var(--banner);
+}
+
+footer svg {
+	width: 1.5rem;
+	height: 1.5rem;
+	fill: currentColor;
+}

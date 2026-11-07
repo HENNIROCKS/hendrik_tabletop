@@ -1,6 +1,6 @@
 # hendrik_tabletop
 
-Social media posts for my tabletop apps, one folder per post. A script renders the images from an HTML template and posts them with their text to Mastodon at [@hendrik_tabletop@mastodon.social](https://mastodon.social/@hendrik_tabletop). Bluesky gets every post through the [Bridgy Fed](https://fed.brid.gy/) mirror. Instagram is planned.
+Social media posts for my tabletop apps, one folder per post. A script renders the images from an HTML template and posts them with their text to Mastodon at [@hendrik_tabletop@mastodon.social](https://mastodon.social/@hendrik_tabletop). Bluesky gets every post through the [Bridgy Fed](https://fed.brid.gy/) mirror. Instagram gets the same images by hand.
 
 ## Setup
 
@@ -74,9 +74,14 @@ npm run post -- drafts/2026-11-04-how-to-install
 
 The images must be rendered after the last change to `post.md`.
 
+## Link page
+
+`site/` is the link page at [tabletop.hennirocks.de](https://tabletop.hennirocks.de), for the bio links: one static HTML page, no build step. Open `site/index.html` in a browser to preview it. Every push to `main` that changes `site/` publishes the folder as it is to GitHub Pages (`.github/workflows/pages.yml`).
+
 ## Credits
 
 - [Grenze Gotisch](https://github.com/Omnibus-Type/Grenze-Gotisch) and [Alegreya](https://github.com/huertatipografica/Alegreya), SIL Open Font License, see `OFL.txt` in each folder under `assets/fonts/`.
+- The link page uses the same two fonts as WOFF2 copies under `site/fonts/`, each with its `OFL.txt`, and icons from [Simple Icons](https://simpleicons.org/), CC0.
 - Background after an etching by Urs Graf, 1524, public domain, see [`assets/backgrounds/CREDITS.md`](assets/backgrounds/CREDITS.md).
 
 ## License
