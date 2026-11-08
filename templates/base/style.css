@@ -97,6 +97,10 @@ body {
     serif;
 }
 
+.post-text strong {
+  font-weight: 600;
+}
+
 .post-text p + p {
   margin-top: 24px;
 }
@@ -160,26 +164,28 @@ body {
   fill: currentColor;
 }
 
-/* A browser bar over the phone: the phone is drawn larger and cut off at the
-   image's bottom edge, with no margin below it. */
-.post-graphic.has-toolbar {
+/* A phone drawn at a set width – the slide's own, or the one a browser bar or a
+   card sets – is cut off at the image's bottom edge, with no margin below it. */
+.post-graphic.has-width,
+.post-graphic.has-toolbar,
+.post-graphic.has-card {
   position: relative;
   margin-bottom: calc(-1 * var(--margin));
 }
 
+/* The slide's width stands on the phone itself. */
+.has-width > .phone {
+  height: auto;
+}
+
+/* A browser bar over the phone: the phone is drawn larger. */
 .has-toolbar > .phone {
   width: 780px;
   height: auto;
 }
 
 /* A single card laid over the phone, tilted, its top left corner level with
-   the phone's top; both are cut off at the image's bottom edge. The radius is
-   the app card's 10 px at its 355 px width. */
-.post-graphic.has-card {
-  position: relative;
-  margin-bottom: calc(-1 * var(--margin));
-}
-
+   the phone's top. The radius is the app card's 10 px at its 355 px width. */
 .has-card > .phone {
   width: 824px;
   height: auto;

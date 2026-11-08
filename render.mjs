@@ -69,6 +69,7 @@ async function renderPost(page, dir) {
 			paragraphs: slide.text ? slide.text.trim().split(/\n\s*\n/) : [],
 			graphic: slide.graphic ? pathToFileURL(resolve(graphics[slide.graphic])).href : null,
 			frame: slide.frame ?? null,
+			width: slide.width ?? null,
 			toolbar: slide.toolbar ? toolbar(slide.toolbar, icons, data.url) : null,
 			card: slide.card ? pathToFileURL(resolve(graphics[slide.card])).href : null,
 			icons,
@@ -128,17 +129,20 @@ async function fill(page, fields) {
 			slot('text').replaceChildren(
 				...fields.paragraphs.map((text) => {
 					const p = document.createElement('p');
+					// "**words**" are set semibold.
+					const inline = (part) =>
+						part.split(/\*\*(.+?)\*\*/).map((piece, i) => (i % 2 ? Object.assign(document.createElement('strong'), { textContent: piece }) : piece));
 					// The icon and the word before it never part at a line break.
 					const parts = text.trim().split(/:([a-z0-9_]+):/);
 					parts.forEach((part, i) => {
 						if (i % 2 === 1) return;
 						const next = parts[i + 1];
-						if (next === undefined) return p.append(part);
+						if (next === undefined) return p.append(...inline(part));
 						const [, before, word] = part.match(/^([\s\S]*?)(\S*\s*)$/);
 						const icon = Object.assign(document.createElement('span'), { className: 'icon', innerHTML: fields.icons[next] });
 						const keep = Object.assign(document.createElement('span'), { className: 'icon-keep' });
-						keep.append(word, icon);
-						p.append(before, keep);
+						keep.append(...inline(word), icon);
+						p.append(...inline(before), keep);
 					});
 					return p;
 				})
@@ -161,6 +165,10 @@ async function fill(page, fields) {
 				graphic.firstChild.append(img);
 			}
 			slot('graphic').replaceChildren(graphic);
+			if (fields.width) {
+				slot('graphic').classList.add('has-width');
+				graphic.style.width = `${fields.width}px`;
+			}
 			if (fields.toolbar) {
 				slot('graphic').classList.add('has-toolbar');
 				slot('graphic').insertAdjacentHTML('beforeend', fields.toolbar.outside);

@@ -43,6 +43,9 @@ export async function readPost(dir) {
 			if (slide?.frame && !slide.graphic) errors.push(`slide ${n}: frame needs a graphic`);
 			if (slide?.card && slide.frame !== 'phone') errors.push(`slide ${n}: card needs frame: phone`);
 			if (slide?.card && slide.toolbar) errors.push(`slide ${n}: card and toolbar do not go together`);
+			if (slide?.width !== undefined && !(Number.isInteger(slide.width) && slide.width > 0)) errors.push(`slide ${n}: width must be a whole number of pixels`);
+			if (slide?.width !== undefined && slide.frame !== 'phone') errors.push(`slide ${n}: width needs frame: phone`);
+			if (slide?.width !== undefined && (slide.toolbar || slide.card)) errors.push(`slide ${n}: width does not go with toolbar or card, which set their own`);
 		});
 	}
 	return { data, channels, errors };
