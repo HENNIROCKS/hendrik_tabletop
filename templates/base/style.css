@@ -26,6 +26,8 @@
   --qr-size: 178px;
   --qr-inset: 34px;
   --qr-gap: 24px;
+  --side-phone-edge: 452px;
+  --side-gap: 42px;
 }
 
 * {
@@ -54,7 +56,8 @@ body {
   padding: 28px var(--margin) var(--margin);
 }
 
-/* The headline keeps clear of the QR code; render.mjs fails if it needs a second line. */
+/* The headline keeps clear of the QR code; render.mjs fails if a line needs breaking.
+   A line break in the title sets a second line. */
 .post-head {
   padding-right: calc(
     var(--qr-inset) + var(--qr-size) + var(--qr-gap) - var(--margin)
@@ -92,16 +95,23 @@ body {
 .post-text {
   margin-top: 68px;
   max-width: 696px;
+}
+
+/* The text above the graphic and the text beside the phone. */
+.post-text,
+.post-side {
   font:
     400 48px/48px "Alegreya",
     serif;
 }
 
-.post-text strong {
+.post-text strong,
+.post-side strong {
   font-weight: 600;
 }
 
-.post-text p + p {
+.post-text p + p,
+.post-side p + p {
   margin-top: 24px;
 }
 
@@ -176,6 +186,40 @@ body {
 /* The slide's width stands on the phone itself. */
 .has-width > .phone {
   height: auto;
+}
+
+/* Text beside the phone: the phone stands at the left edge, its right edge at
+   --side-phone-edge, cut off on the left and at the bottom. The text runs from
+   the phone's top to the bottom margin, its last paragraph standing at the bottom. */
+.post-graphic.has-side {
+  display: flex;
+  margin-left: calc(-1 * var(--margin));
+  margin-right: calc(-1 * var(--margin));
+}
+
+.has-side > .phone {
+  position: absolute;
+  top: 0;
+  right: calc(100% - var(--side-phone-edge));
+}
+
+.post-side {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: calc(100% - var(--margin));
+  padding-left: calc(var(--side-phone-edge) + var(--side-gap));
+  padding-right: var(--margin);
+}
+
+/* Icons leading a list item are drawn larger than those inside a sentence. */
+.post-side .icon svg {
+  height: 1.05em;
+  vertical-align: -0.17em;
+}
+
+.post-side p:last-child:not(:first-child) {
+  margin-top: auto;
 }
 
 /* A browser bar over the phone: the phone is drawn larger. */

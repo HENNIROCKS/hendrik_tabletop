@@ -48,13 +48,15 @@ https://hennirocks.github.io/fantasy-city-warbands
 How to install Fantasy City Warbands – no store, no account. Link in bio.
 ```
 
+- `title` is one line; a line break in it (`"Your Fantasy City\nwarbands"`) sets a second one.
 - `url` becomes the QR code on every slide.
 - Each slide needs `alt` and either `text`, a `graphic` or both. A graphic is read from the folder's `originals/` and saved beside `post.md` as WebP, at most 1080 px wide; `originals/` is git-ignored. `frame: phone` draws a phone around it.
 - A graphic the folder does not have is taken from `assets/screenshots/`, the screenshots more than one post shows. It is copied into the post once, so replacing a screenshot there leaves earlier posts as they were.
 - `toolbar: safari` draws Safari's toolbar over the phone, `toolbar: chrome` Chrome's address bar with its menu open; both need `frame: phone`. The phone is then drawn larger and cut off at the image's bottom edge.
 - `card: <image>` lays a single card, cut from a screenshot, tilted over the phone; it needs `frame: phone` and no `toolbar`, is read like a graphic, and phone and card are cut off at the image's bottom edge.
 - `width: <px>` draws the phone at that width and cuts it off at the image's bottom edge, for a screenshot that needs to show larger than the whole phone fits; it needs `frame: phone` and goes with neither `toolbar` nor `card`, which set their own width.
-- `:name:` in a slide's text is the icon of that name from `assets/icons/`, kept on one line with the word before it. `**words**` are set semibold. The icons are [Material Symbols](https://fonts.google.com/icons) (Apache 2.0); `node icons.mjs <name> …` fetches more.
+- `side: |` sets paragraphs beside the phone, which then stands at the image's left edge with its right edge at 452 px, cut off at the bottom and, once `width` exceeds 452 px, on the left; it needs `frame: phone` and `width`. The text starts level with the phone's top, and its last paragraph stands at the bottom edge. The run fails if it does not fit.
+- `:name:` in a slide's `text` or `side` is the icon of that name from `assets/icons/`, kept on one line with the word before it. `**words**` are set semibold. The icons are [Material Symbols](https://fonts.google.com/icons) (Apache 2.0); `node icons.mjs <name> …` fetches more.
 - `hashtags` are added below the Mastodon text, which Pixelfed gets too; there is no `## Pixelfed` section.
 
 Drafts live in `drafts/`, which is git-ignored, so a post is not public before it is ready. Published posts go into `posts/YYYY/YYYY-MM-DD-slug/`.
@@ -65,7 +67,7 @@ Drafts live in `drafts/`, which is git-ignored, so a post is not public before i
 npm run render -- drafts/2026-11-04-how-to-install
 ```
 
-Writes `1.jpg`, `2.jpg`, … (1080 × 1350, one per slide) into the folder. The run fails, and leaves the old images alone, if a headline does not fit on one line or a slide's content runs past the bottom edge.
+Writes `1.jpg`, `2.jpg`, … (1080 × 1350, one per slide) into the folder. The run fails, and leaves the old images alone, if a line of the headline does not fit or a slide's content runs past the bottom edge.
 
 `npm run render -- base` renders the template with its sample text to `out/base.jpg`.
 

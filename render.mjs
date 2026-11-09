@@ -47,7 +47,7 @@ async function renderPost(page, dir) {
 	if (errors.length) return fail(`${dir}/post.md:\n  ${errors.join('\n  ')}`);
 
 	const icons = await loadIcons();
-	const unknown = data.slides.flatMap((s) => [...(s.text ?? '').matchAll(ICON_PATTERN)].map((m) => m[1]).filter((n) => !icons[n]));
+	const unknown = data.slides.flatMap((s) => [...`${s.text ?? ''} ${s.side ?? ''}`.matchAll(ICON_PATTERN)].map((m) => m[1]).filter((n) => !icons[n]));
 	if (unknown.length) return fail(`${dir}/post.md: no icon named ${unknown.join(', ')}`);
 
 	const graphics = {};
@@ -67,6 +67,7 @@ async function renderPost(page, dir) {
 			title: data.title,
 			qr: circleQr(data.url),
 			paragraphs: slide.text ? slide.text.trim().split(/\n\s*\n/) : [],
+			side: slide.side ? slide.side.trim().split(/\n\s*\n/) : null,
 			graphic: slide.graphic ? pathToFileURL(resolve(graphics[slide.graphic])).href : null,
 			frame: slide.frame ?? null,
 			width: slide.width ?? null,
@@ -119,42 +120,33 @@ async function openTemplate(page, template) {
 async function fill(page, fields) {
 	await page.evaluate(async (fields) => {
 		const slot = (name) => document.querySelector(`[data-field="${name}"]`);
+		// ":name:" becomes the icon of that name, inline in the text.
+		const paragraph = (text) => {
+			const p = document.createElement('p');
+			// "**words**" are set semibold.
+			const inline = (part) =>
+				part.split(/\*\*(.+?)\*\*/).map((piece, i) => (i % 2 ? Object.assign(document.createElement('strong'), { textContent: piece }) : piece));
+			// The icon and the word before it never part at a line break.
+			const parts = text.trim().split(/:([a-z0-9_]+):/);
+			parts.forEach((part, i) => {
+				if (i % 2 === 1) return;
+				const next = parts[i + 1];
+				if (next === undefined) return p.append(...inline(part));
+				const [, before, word] = part.match(/^([\s\S]*?)(\S*\s*)$/);
+				const icon = Object.assign(document.createElement('span'), { className: 'icon', innerHTML: fields.icons[next] });
+				const keep = Object.assign(document.createElement('span'), { className: 'icon-keep' });
+				keep.append(...inline(word), icon);
+				p.append(...inline(before), keep);
+			});
+			return p;
+		};
 		if (fields.date !== undefined) slot('date').textContent = fields.date;
 		if (fields.page === null) slot('page')?.remove();
 		else if (fields.page !== undefined) slot('page').textContent = fields.page;
-		if (fields.title !== undefined) slot('title').textContent = fields.title;
+		// A line break in the title starts its second line.
+		if (fields.title !== undefined) slot('title').replaceChildren(...fields.title.split('\n').flatMap((line, i) => (i ? [document.createElement('br'), line] : [line])));
 		if (fields.qr !== undefined) slot('qr').innerHTML = fields.qr;
-		if (fields.paragraphs !== undefined) {
-			// ":name:" becomes the icon of that name, inline in the text.
-			slot('text').replaceChildren(
-				...fields.paragraphs.map((text) => {
-					const p = document.createElement('p');
-					// "**words**" are set semibold.
-					const inline = (part) =>
-						part.split(/\*\*(.+?)\*\*/).map((piece, i) => (i % 2 ? Object.assign(document.createElement('strong'), { textContent: piece }) : piece));
-					// The icon and the word before it never part at a line break.
-					const parts = text.trim().split(/:([a-z0-9_]+):/);
-					parts.forEach((part, i) => {
-						if (i % 2 === 1) return;
-						const next = parts[i + 1];
-						if (next === undefined) return p.append(...inline(part));
-						const [, before, word] = part.match(/^([\s\S]*?)(\S*\s*)$/);
-						const icon = Object.assign(document.createElement('span'), { className: 'icon', innerHTML: fields.icons[next] });
-						const keep = Object.assign(document.createElement('span'), { className: 'icon-keep' });
-						keep.append(...inline(word), icon);
-						p.append(...inline(before), keep);
-					});
-					return p;
-				})
-			);
-		}
-		// A text icon is only as wide as its glyph, so a narrow one like ⋮ keeps no gap beside it.
-		for (const svg of document.querySelectorAll('.icon svg')) {
-			const box = svg.getBBox();
-			const pad = 120;
-			svg.setAttribute('viewBox', `${box.x - pad} -960 ${box.width + 2 * pad} 960`);
-			svg.style.width = `${(0.82 * (box.width + 2 * pad)) / 960}em`;
-		}
+		if (fields.paragraphs !== undefined) slot('text').replaceChildren(...fields.paragraphs.map(paragraph));
 		if (fields.graphic) {
 			const img = Object.assign(document.createElement('img'), { src: fields.graphic, alt: fields.alt ?? '' });
 			let graphic = img;
@@ -168,6 +160,13 @@ async function fill(page, fields) {
 			if (fields.width) {
 				slot('graphic').classList.add('has-width');
 				graphic.style.width = `${fields.width}px`;
+			}
+			// Text beside the phone, which then stands at the left edge.
+			if (fields.side) {
+				slot('graphic').classList.add('has-side');
+				const side = Object.assign(document.createElement('div'), { className: 'post-side' });
+				side.append(...fields.side.map(paragraph));
+				slot('graphic').append(side);
 			}
 			if (fields.toolbar) {
 				slot('graphic').classList.add('has-toolbar');
@@ -183,6 +182,14 @@ async function fill(page, fields) {
 			}
 			await img.decode();
 		}
+		// A text icon is only as wide as its glyph, so a narrow one like ⋮ keeps no gap beside it.
+		// Its height comes from the stylesheet.
+		for (const svg of document.querySelectorAll('.icon svg')) {
+			const box = svg.getBBox();
+			const pad = 120;
+			svg.setAttribute('viewBox', `${box.x - pad} -960 ${box.width + 2 * pad} 960`);
+			svg.style.width = `${(parseFloat(getComputedStyle(svg).height) * (box.width + 2 * pad)) / 960}px`;
+		}
 		await document.fonts.ready;
 	}, fields);
 }
@@ -194,9 +201,14 @@ async function check(page) {
 		const title = document.querySelector('[data-field="title"]');
 		const head = title.parentElement;
 		const room = head.clientWidth - parseFloat(getComputedStyle(head).paddingRight);
-		if (title.scrollWidth > room) found.push(`headline is ${title.scrollWidth - room} px too wide for one line`);
+		if (title.scrollWidth > room) found.push(`headline is ${title.scrollWidth - room} px too wide for its line`);
 		const post = document.querySelector('.post');
 		if (post.scrollHeight > post.clientHeight) found.push(`content is ${post.scrollHeight - post.clientHeight} px too tall`);
+		// The graphic slot clips, so text beside the phone is checked on its own: by its
+		// last line box, as the descenders below the last line overflow every paragraph.
+		const side = document.querySelector('.post-side');
+		const over = side && side.lastElementChild.getBoundingClientRect().bottom - side.getBoundingClientRect().bottom;
+		if (over > 0) found.push(`text beside the phone is ${Math.ceil(over)} px too tall`);
 		return found;
 	});
 }

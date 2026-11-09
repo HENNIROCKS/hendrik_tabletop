@@ -63,7 +63,7 @@ async function publish() {
 	console.log('Waiting to be posted:\n');
 	drafts.forEach((draft, i) => {
 		const { data, problems, published, targets } = draft;
-		const head = data ? `${data.date}  ${data.title}  (${data.slides.length} ${data.slides.length === 1 ? 'slide' : 'slides'})` : draft.dir;
+		const head = data ? `${data.date}  ${data.title.replace(/\n/g, ' ')}  (${data.slides.length} ${data.slides.length === 1 ? 'slide' : 'slides'})` : draft.dir;
 		console.log(`${String(i + 1).padStart(2)}  ${head}`);
 		if (Object.keys(published).length) console.log(`    not on ${targets.map(({ name }) => name).join(', ')} yet`);
 		if (problems.length) console.log(`    cannot be posted: ${problems.join('; ').replace(/\n\s*/g, ' ')}`);
