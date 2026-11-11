@@ -15,10 +15,13 @@ const MAX_CHARS = 500;
 const LINK_CHARS = 23;
 const MEDIA_POLL_MS = 1000;
 const MEDIA_POLL_TRIES = 30;
-/** Where a post goes, in this order; `key` names its entry in published.json and its variables in .env. */
+/**
+ * Where a post goes, in this order; `key` names its entry in published.json and its variables in .env.
+ * `maxImages` is what the instance takes per post (its max_media_attachments); a channel gets the first ones.
+ */
 const CHANNELS = [
-	{ key: 'mastodon', name: 'Mastodon' },
-	{ key: 'pixelfed', name: 'Pixelfed' }
+	{ key: 'mastodon', name: 'Mastodon', maxImages: 4 },
+	{ key: 'pixelfed', name: 'Pixelfed', maxImages: 20 }
 ];
 
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
@@ -57,6 +60,8 @@ export async function prepare(dir) {
 	const problems = [];
 	const postTime = statSync(join(dir, 'post.md')).mtimeMs;
 	prepared.images = data.slides.map((slide, i) => ({ file: join(dir, `${i + 1}.jpg`), alt: slide.alt }));
+	const most = Math.max(...CHANNELS.map(({ maxImages }) => maxImages));
+	if (prepared.images.length > most) problems.push(`${prepared.images.length} slides, but no channel takes more than ${most} images`);
 	for (const { file } of prepared.images) {
 		if (!existsSync(file)) problems.push(`${file} is missing`);
 		else if (statSync(file).mtimeMs < postTime) problems.push(`${file} is older than post.md`);
@@ -74,6 +79,9 @@ export async function prepare(dir) {
 /** What --dry-run prints: the channels, the Mastodon text, its length and the images with their alt text. */
 export function preview({ status, length, images, targets }) {
 	const lines = [`to: ${targets.map(({ name }) => name).join(', ')}`, '', status, '', `${length}/${MAX_CHARS} characters`];
+	for (const { name, maxImages } of targets) {
+		if (images.length > maxImages) lines.push(`${name} gets the first ${maxImages} of ${images.length} images`);
+	}
 	for (const { file, alt } of images) lines.push(`${file}  alt: ${alt}`);
 	return lines.join('\n');
 }
@@ -102,15 +110,15 @@ export async function send({ dir, status, images, published, targets }) {
 	return urls;
 }
 
-/** Uploads the images to one channel and posts publicly; returns its published.json entry. */
-async function sendTo({ key, name }, { dir, status, images }) {
+/** Uploads the images, as many as the channel takes, and posts publicly; returns its published.json entry. */
+async function sendTo({ key, name, maxImages }, { dir, status, images }) {
 	const instance = process.env[`${key.toUpperCase()}_INSTANCE`];
 	const token = process.env[`${key.toUpperCase()}_TOKEN`];
 	const api = (path, options = {}) =>
 		fetch(`${instance}${path}`, { ...options, headers: { Authorization: `Bearer ${token}`, ...options.headers } });
 
 	const media = [];
-	for (const { file, alt } of images) {
+	for (const { file, alt } of images.slice(0, maxImages)) {
 		const form = new FormData();
 		form.append('file', new Blob([await readFile(file)], { type: 'image/jpeg' }), file.split('/').pop());
 		form.append('description', alt);

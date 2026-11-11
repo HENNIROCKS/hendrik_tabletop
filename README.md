@@ -82,6 +82,8 @@ npm run post -- drafts/2026-11-04-how-to-install
 
 The images must be rendered after the last change to `post.md`.
 
+Mastodon takes four images per post, Pixelfed twenty. A channel gets the first ones its instance takes, so a post with more slides shows only its first four on Mastodon and, through the mirror, on Bluesky; `--dry-run` says so. A post with more slides than the most any channel takes is refused.
+
 ```sh
 npm run publish
 ```
