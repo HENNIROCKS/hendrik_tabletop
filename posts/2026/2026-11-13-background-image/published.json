@@ -1,0 +1,24 @@
+{
+	"mastodon": {
+		"id": "117609788377829353",
+		"url": "https://mastodon.social/@hendrik_tabletop/117609788377829353",
+		"media": [
+			"https://files.mastodon.social/media_attachments/files/117/609/788/101/670/339/original/468ba55cc3590bc9.jpg",
+			"https://files.mastodon.social/media_attachments/files/117/609/788/206/601/318/original/98bc47cffe1f11bc.jpg",
+			"https://files.mastodon.social/media_attachments/files/117/609/788/279/835/575/original/d987127c22d0f70d.jpg",
+			"https://files.mastodon.social/media_attachments/files/117/609/788/337/523/578/original/c8bc9f124b35d976.jpg"
+		]
+	},
+	"pixelfed": {
+		"id": "1026875354285921054",
+		"url": "https://pixelfed.social/p/hendrik_tabletop/1026875354285921054",
+		"media": [
+			"https://pixelfed.social/storage/m/_v2/1024765431323729850/4796c06ff-5eacf7/ne6R9L05bKUJ/3e92BjXizJs9qptfRDta3OfzAFtvSLByO5FKd9su.jpg",
+			"https://pixelfed.social/storage/m/_v2/1024765431323729850/4796c06ff-5eacf7/KCxCEDEKH4cD/z4JrJZCqduJAFr26ch3ETnFrdXk0O0Iv61kzd15Y.jpg",
+			"https://pxscdn.com/public/m/_v2/1024765431323729850/4796c06ff-5eacf7/1lkNQRtbLAHQ/v2u5qV7nNDlxVYvQMEifplB5l0DZAV4ciilK7fbq.jpg",
+			"https://pixelfed.social/storage/m/_v2/1024765431323729850/4796c06ff-5eacf7/FbX0hxrWaxPt/Y97PsvscmLpeGJQspheRdleVwpitCSXMkKJRkASB.jpg",
+			"https://pxscdn.com/public/m/_v2/1024765431323729850/4796c06ff-5eacf7/FPw0dUnk4wra/qDxMrjOpp2d5Hc1km5ZLpi9FREVErQMKhRGXfKfH.jpg",
+			"https://pixelfed.social/storage/m/_v2/1024765431323729850/4796c06ff-5eacf7/DgYAR5W7iejm/40zMaVBGY9eTP3aFnV9yuglskxAaJ0YYT2eZ8IHf.jpg"
+		]
+	}
+}
