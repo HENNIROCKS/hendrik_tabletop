@@ -15,9 +15,13 @@ Death in a Tree*, 1524, Urs Graf the Elder, accession 1942.118, CC0.
 Whether the Wellcome sheet is Graf's own impression or a copy after it is not
 settled there, so the posts call it a print after Urs Graf. The readings the
 posts give (a Swiss and a German Landsknecht, the transience of life, the
-theme recurring in Graf's work) are Giulia Bartrum's, *German Renaissance
-prints 1490-1550* (London: British Museum, 1995), no. 225, which the Wellcome
-entry quotes. That Graf was a soldier himself is in both entries.
+woman as vice) are Giulia Bartrum's, *German Renaissance prints 1490-1550*
+(London: British Museum, 1995), no. 225, which the Wellcome entry quotes.
+Bartrum was curator of German prints and drawings at the British Museum from
+1991 to 2019 (<https://en.wikipedia.org/wiki/Giulia_Bartrum>). That Graf was
+a soldier himself is in both entries, and that he drew such scenes often in
+the Cleveland one. His dates, c. 1485-1527/29, are Cleveland's; the Art
+Institute of Chicago gives 1527/28 for his death.
 
 Details of the same sheet are in the graphics of the post
 `posts/2026/2026-11-13-background-image/`.
