@@ -93,7 +93,7 @@ Picks what goes out, in a terminal: it lists every folder in `drafts/` that is n
 
 ## Update posts
 
-"Latest updates" is a recurring post of text only, set like the app's What's new page: a heading with the day, each game a list item with its entries beneath, the whole width. Every post has the same headline, `Latest updates`, and its QR code and link go to What's new. One post a week, on Saturdays, covers every day since the last one, one slide per day and at most four.
+"Latest updates" is a recurring post of text only, set like the app's What's new page: a heading with the day, each game a list item with its entries beneath, the whole width. Every post has the same headline, `Latest updates`, and its QR code and link go to What's new. A post covers every day since the last one, one slide per day and at most four.
 
 ```sh
 npm run updates
@@ -103,7 +103,7 @@ writes `drafts/<today>-latest-updates/post.md` from the app's `docs/whats-new.md
 
 - Only what a player notices at the table; no more than 8 entries a slide and two lines an entry.
 - Keep the old value as "(was …)", exactly as What's new has it.
-- The Mastodon text is `Latest updates to Fantasy City Warbands: <games>.`, the link, and the line on the early version; it stays under 500 characters.
+- The Mastodon text is `Latest updates to Fantasy City Warbands:` and one highlight per game, then the link and the line on the early version; it stays under 500 characters. The draft lists only the game names there.
 
 Before posting, check that the update is live.
 
