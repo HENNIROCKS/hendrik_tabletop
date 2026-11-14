@@ -8,6 +8,7 @@
 	},
 	"scripts": {
 		"render": "node render.mjs",
+		"updates": "node updates.mjs",
 		"post": "node --env-file=.env post.mjs",
 		"publish": "node --env-file=.env publish.mjs"
 	},

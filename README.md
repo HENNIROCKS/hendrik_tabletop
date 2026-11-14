@@ -56,6 +56,7 @@ How to install Fantasy City Warbands – no store, no account. Link in bio.
 - `card: <image>` lays a single card, cut from a screenshot, tilted over the phone; it needs `frame: phone` and no `toolbar`, is read like a graphic, and phone and card are cut off at the image's bottom edge.
 - `width: <px>` draws the phone at that width and cuts it off at the image's bottom edge, for a screenshot that needs to show larger than the whole phone fits; it needs `frame: phone` and goes with neither `toolbar` nor `card`, which set their own width.
 - `side: |` sets paragraphs beside the phone, which then stands at the image's left edge with its right edge at 452 px, cut off at the bottom and, once `width` exceeds 452 px, on the left; it needs `frame: phone` and `width`. The text starts level with the phone's top, and its last paragraph stands at the bottom edge. The run fails if it does not fit.
+- In `text` or `side`, a block that starts with `# ` is a heading, and a block of lines that start with `- ` is a list, one item per line; an item indented by two spaces belongs to the one above, as on the app's What's new page. A list takes the whole width.
 - `:name:` in a slide's `text` or `side` is the icon of that name from `assets/icons/`, kept on one line with the word before it. `**words**` are set semibold. The icons are [Material Symbols](https://fonts.google.com/icons) (Apache 2.0); `node icons.mjs <name> …` fetches more.
 - `hashtags` are added below the Mastodon text, which Pixelfed gets too; there is no `## Pixelfed` section.
 
@@ -89,6 +90,22 @@ npm run publish
 ```
 
 Picks what goes out, in a terminal: it lists every folder in `drafts/` that is not on both channels yet, with the channels still missing for one already partly out, what keeps one from going out and a warning when the date in its images is not today. The numbers typed pick the posts; each is shown as `--dry-run` shows it, and its images open in Preview unless declined. Then it asks twice – `y`, and the number of posts picked – and anything else posts nothing. The posts go out one after the other; if one fails, the run stops and names those already out. Each one posted moves to `posts/YYYY/`, and so does a draft already on both channels when a run starts, such as one posted with `npm run post`.
+
+## Update posts
+
+"Latest updates" is a recurring post of text only, set like the app's What's new page: a heading with the day, each game a list item with its entries beneath, the whole width. Every post has the same headline, `Latest updates`, and its QR code and link go to What's new. One post a week, on Saturdays, covers every day since the last one, one slide per day and at most four.
+
+```sh
+npm run updates
+```
+
+writes `drafts/<today>-latest-updates/post.md` from the app's `docs/whats-new.md` (read from `../fantasy-city-warbands`, or `--app <folder>`) for every day after the last `latest-updates` post in `posts/`, or after `--since YYYY-MM-DD`. It drops entries that only say a game's tile has a link, unless that is all a game has that day, and warns when a day has more than 8 entries or the post more than 4 days. Shortening stays by hand, in the slides and in their `alt`:
+
+- Only what a player notices at the table; no more than 8 entries a slide and two lines an entry.
+- Keep the old value as "(was …)", exactly as What's new has it.
+- The Mastodon text is `Latest updates to Fantasy City Warbands: <games>.`, the link, and the line on the early version; it stays under 500 characters.
+
+Before posting, check that the update is live.
 
 ## Link page
 
