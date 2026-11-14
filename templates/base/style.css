@@ -111,8 +111,53 @@ body {
 }
 
 .post-text p + p,
-.post-side p + p {
+.post-side p + p,
+.post-text p + ul,
+.post-side p + ul,
+.post-text ul + p,
+.post-side ul + p,
+.post-text p + h2,
+.post-side p + h2 {
   margin-top: 24px;
+}
+
+/* A heading and a list, set as the app's What's new page sets them: a list under a heading
+   takes the whole width, its items carry sub-items marked with a ring. */
+.post-text:has(ul) {
+  max-width: none;
+}
+
+.post-text h2,
+.post-side h2 {
+  font-weight: 600;
+  font-size: 60px;
+  line-height: 60px;
+}
+
+.post-text h2 + ul,
+.post-side h2 + ul {
+  margin-top: 36px;
+}
+
+.post-text ul,
+.post-side ul {
+  padding-left: 40px;
+}
+
+.post-text ul ul,
+.post-side ul ul {
+  margin-top: 12px;
+  list-style: circle;
+}
+
+.post-text li + li,
+.post-side li + li {
+  margin-top: 24px;
+}
+
+.post-text li li + li,
+.post-side li li + li {
+  margin-top: 12px;
 }
 
 /* Whatever room the text leaves; a graphic shows whole, standing on the bottom edge.

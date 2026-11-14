@@ -140,13 +140,38 @@ async function fill(page, fields) {
 			});
 			return p;
 		};
+		// A block starting with "# " is a heading. A block whose lines start with "- " is a list, one
+		// item per line; an item indented by two spaces belongs to the one above.
+		const block = (text) => {
+			const trimmed = text.trim();
+			if (trimmed.startsWith('# ')) {
+				const h = document.createElement('h2');
+				h.append(...paragraph(trimmed.slice(2)).childNodes);
+				return h;
+			}
+			if (!trimmed.startsWith('- ')) return paragraph(text);
+			const ul = document.createElement('ul');
+			let sub = null;
+			for (const line of trimmed.split('\n')) {
+				const li = document.createElement('li');
+				li.append(...paragraph(line.replace(/^\s*- /, '')).childNodes);
+				if (!/^\s/.test(line)) {
+					ul.append(li);
+					sub = null;
+				} else {
+					if (!sub) ul.lastElementChild.append((sub = document.createElement('ul')));
+					sub.append(li);
+				}
+			}
+			return ul;
+		};
 		if (fields.date !== undefined) slot('date').textContent = fields.date;
 		if (fields.page === null) slot('page')?.remove();
 		else if (fields.page !== undefined) slot('page').textContent = fields.page;
 		// A line break in the title starts its second line.
 		if (fields.title !== undefined) slot('title').replaceChildren(...fields.title.split('\n').flatMap((line, i) => (i ? [document.createElement('br'), line] : [line])));
 		if (fields.qr !== undefined) slot('qr').innerHTML = fields.qr;
-		if (fields.paragraphs !== undefined) slot('text').replaceChildren(...fields.paragraphs.map(paragraph));
+		if (fields.paragraphs !== undefined) slot('text').replaceChildren(...fields.paragraphs.map(block));
 		if (fields.graphic) {
 			const img = Object.assign(document.createElement('img'), { src: fields.graphic, alt: fields.alt ?? '' });
 			let graphic = img;
@@ -165,7 +190,7 @@ async function fill(page, fields) {
 			if (fields.side) {
 				slot('graphic').classList.add('has-side');
 				const side = Object.assign(document.createElement('div'), { className: 'post-side' });
-				side.append(...fields.side.map(paragraph));
+				side.append(...fields.side.map(block));
 				slot('graphic').append(side);
 			}
 			if (fields.toolbar) {
