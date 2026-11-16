@@ -71,6 +71,7 @@ async function renderPost(page, dir) {
 			graphic: slide.graphic ? pathToFileURL(resolve(graphics[slide.graphic])).href : null,
 			frame: slide.frame ?? null,
 			width: slide.width ?? null,
+			bleed: slide.bleed ?? false,
 			toolbar: slide.toolbar ? toolbar(slide.toolbar, icons, data.url) : null,
 			card: slide.card ? pathToFileURL(resolve(graphics[slide.card])).href : null,
 			icons,
@@ -186,6 +187,7 @@ async function fill(page, fields) {
 				slot('graphic').classList.add('has-width');
 				graphic.style.width = `${fields.width}px`;
 			}
+			if (fields.bleed) slot('graphic').classList.add('has-bleed');
 			// Text beside the phone, which then stands at the left edge.
 			if (fields.side) {
 				slot('graphic').classList.add('has-side');

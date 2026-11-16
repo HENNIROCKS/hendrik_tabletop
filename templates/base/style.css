@@ -220,12 +220,18 @@ body {
 }
 
 /* A phone drawn at a set width – the slide's own, or the one a browser bar or a
-   card sets – is cut off at the image's bottom edge, with no margin below it. */
+   card sets – and a graphic set to bleed are cut off at the image's bottom edge,
+   with no margin below them. A graphic set to bleed is cut off at the sides too. */
 .post-graphic.has-width,
 .post-graphic.has-toolbar,
-.post-graphic.has-card {
+.post-graphic.has-card,
+.post-graphic.has-bleed {
   position: relative;
   margin-bottom: calc(-1 * var(--margin));
+}
+
+.post-graphic.has-bleed {
+  margin-inline: calc(-1 * var(--margin));
 }
 
 /* The slide's width stands on the phone itself. */

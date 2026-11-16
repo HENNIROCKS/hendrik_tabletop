@@ -48,6 +48,9 @@ export async function readPost(dir) {
 			if (slide?.width !== undefined && (slide.toolbar || slide.card)) errors.push(`slide ${n}: width does not go with toolbar or card, which set their own`);
 			if (slide?.side !== undefined && typeof slide.side !== 'string') errors.push(`slide ${n}: side must be text`);
 			if (slide?.side !== undefined && (slide.frame !== 'phone' || slide.width === undefined)) errors.push(`slide ${n}: side needs frame: phone and a width`);
+			if (slide?.bleed !== undefined && slide.bleed !== true) errors.push(`slide ${n}: bleed must be true or left out`);
+			if (slide?.bleed && !slide.graphic) errors.push(`slide ${n}: bleed needs a graphic`);
+			if (slide?.bleed && slide.frame) errors.push(`slide ${n}: bleed does not go with frame, whose phone sets its own edge`);
 		});
 	}
 	return { data, channels, errors };
