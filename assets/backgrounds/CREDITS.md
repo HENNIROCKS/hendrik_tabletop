@@ -28,6 +28,6 @@ Details of the same sheet are in the graphics of the post
 
 ## Logos in posts
 
-The channel logos on the cards of the post `posts/2026/2026-11-12-where-to-follow/`
+The channel logos on the cards of the post `posts/2026/2026-11-15-where-to-follow/`
 are from Simple Icons, CC0. <https://simpleicons.org>
 
