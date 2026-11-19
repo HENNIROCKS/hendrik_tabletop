@@ -34,4 +34,5 @@ Posts, Templates, Code, Kommentare, README und Commits sind englisch.
   ein gepushter Post ist vor seinem Datum öffentlich lesbar.
 - Ins Repo kommen nur Schriften mit freier Lizenz (mit Lizenzdatei), eigene
   oder gemeinfreie Hintergründe mit Quelle in `CREDITS.md` und Screenshots
-  der Apps – keine Bilder aus Regelbüchern.
+  der Apps, dazu Icons mit freier Lizenz (Material Symbols, die eigenen der
+  Apps) – keine Bilder aus Regelbüchern.
